@@ -19,7 +19,7 @@
 
     <div id="cover-page" class="screen hidden">
         <div class="video-background">
-            <video autoplay muted loop id="bg-video-cover"> 
+            <video autoplay muted loop **playsinline** id="bg-video-cover"> 
                 <source src="your-background-video.mp4" type="video/mp4">
             </video>
         </div>
@@ -40,19 +40,19 @@
     <div id="main-content" class="hidden"> 
         
         <div id="background-container" class="video-background">
-            <video muted loop class="bg-video-main active" id="bg-video-1"> 
+            <video muted loop **playsinline** class="bg-video-main active" id="bg-video-1"> 
                 <source src="your-background-video.mp4" type="video/mp4">
             </video>
-            <video muted loop class="bg-video-main" id="bg-video-2">
+            <video muted loop **playsinline** class="bg-video-main" id="bg-video-2">
                 <source src="your-background-video-3.mp4" type="video/mp4">
             </video>
-            <video muted loop class="bg-video-main" id="bg-video-3">
+            <video muted loop **playsinline** class="bg-video-main" id="bg-video-3">
                 <source src="your-background-video-3.mp4" type="video/mp4">
             </video>
-            <video muted loop class="bg-video-main" id="bg-video-4">
+            <video muted loop **playsinline** class="bg-video-main" id="bg-video-4">
                 <source src="your-background-video.mp4" type="video/mp4">
             </video>
-            <video muted loop class="bg-video-main" id="bg-video-5">
+            <video muted loop **playsinline** class="bg-video-main" id="bg-video-5">
                 <source src="your-background-video.mp4" type="video/mp4">
             </video>
         </div>
@@ -155,12 +155,15 @@
                 </div>
             </section>
 
-        </div> </div> <div id="wishes-popup" class="hidden-popup">
+        </div> 
+    </div> 
+    
+    <div id="wishes-popup" class="hidden-popup">
         <div class="popup-content">
             <span class="close-btn">&times;</span>
             <h3 class="popup-title">WISHES</h3>
             <div id="wishes-list" class="wishes-list">
-                </div>
+            </div>
         </div>
     </div>
 

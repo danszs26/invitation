@@ -80,17 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if(countdownEl.minutes) countdownEl.minutes.textContent = formatTime(m);
             if(countdownEl.seconds) countdownEl.seconds.textContent = formatTime(s);
         } else {
-            clearInterval(countdownInterval);
+            // Cek apakah countdownInterval ada sebelum mencoba membersihkannya
+            if (typeof countdownInterval !== 'undefined') {
+                clearInterval(countdownInterval);
+            }
         }
     }
     
+    let countdownInterval;
     if (countdownEl.days) {
-        const countdownInterval = setInterval(updateCountdown, 1000);
+        countdownInterval = setInterval(updateCountdown, 1000);
         updateCountdown(); 
     }
     
     
-    // --- 4. FUNGSI CAROUSEL ---
+    // --- 4. FUNGSI CAROUSEL (TELAH DIPERBAIKI UNTUK MENGHINDARI ABORTERROR) ---
 
     function switchBackground(pageIndex) {
         if (sections.length === 0) return;
@@ -98,13 +102,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetVideoId = sections[pageIndex - 1].getAttribute('data-video-id');
         
         bgVideosMain.forEach(video => {
-            video.classList.remove('active');
-            video.pause();
             
             if (video.id === targetVideoId) {
+                // 1. Tampilkan video target
                 video.classList.add('active');
                 video.currentTime = 0; 
-                video.play().catch(e => {}); 
+                // 2. Coba putar video. catch() untuk menangani error jika gagal play (misal: browser blocking)
+                video.play().catch(e => {
+                    console.error("Gagal memutar video target:", e.name);
+                }); 
+            } else {
+                // 3. Sembunyikan dan jeda video lain
+                video.classList.remove('active');
+                
+                // KRITIS: HANYA panggil pause() jika video sedang berjalan (video.paused === false).
+                // Ini mencegah AbortError yang terjadi karena pause() menginterupsi play()
+                if (video.paused === false) { 
+                     video.pause();
+                }
             }
         });
     }
@@ -126,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleWheel(event) {
+        // Abaikan scroll jika masih di cover page atau sedang transisi
         if (mainContent.classList.contains('hidden') || isTransitioning) {
             event.preventDefault(); 
             return;
@@ -133,9 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const delta = event.deltaY || event.detail || event.wheelDelta;
         
-        if (delta > 0) { 
+        if (delta > 0) { // Scroll Down
             goToPage(currentPage + 1);
-        } else if (delta < 0) { 
+        } else if (delta < 0) { // Scroll Up
             goToPage(currentPage - 1);
         }
         
@@ -157,9 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (Math.abs(delta) < minSwipeDistance) return;
 
-        if (delta > 0) { 
+        if (delta > 0) { // Swipe Up
             goToPage(currentPage + 1);
-        } else { 
+        } else { // Swipe Down
             goToPage(currentPage - 1);
         }
     });
@@ -272,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mainContent.classList.remove('hidden');
             mainContent.style.opacity = 1; 
 
-            // Inisialisasi carousel
+            // Inisialisasi carousel (panggil goToPage(1) setelah main content muncul)
             goToPage(1); 
             
         }, 1000); 
