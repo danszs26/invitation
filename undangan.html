@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Undangan — Afifa & Dani</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#b76e79;
+      --bg:#0f0f0f; /* <--- SUDAH DIPERBAIKI: Menambahkan nilai kode warna */
+      --muted:#9b9b9b;
+      --card-radius:18px;
+      --glass: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,-apple-system,"Noto Sans",sans-serif;background:var(--bg);color:#fff;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    .viewport{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:0 16px}
+    .frame{width:100%;max-width:540px;position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(180deg,#0b0b0b, #0f0f0f);box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+    
+    /* 1. Preloader Styling (Hitam Penuh) */
+    .preloader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;z-index:99;background:var(--bg);opacity:1;transition:opacity .6s ease-out; text-align: center; padding: 20px;}
+    .preloader-sub{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.7)}
+    .preloader-names{font-family:'Playfair Display';font-size:28px;letter-spacing:.8px;margin-top:6px; margin-bottom: 8px;}
+    
+    /* Logo Bunga */
+    .logo-small{
+        display: block;
+        font-size: 30px; /* Ikon Bunga lebih besar */
+        margin-bottom: 20px;
+        line-height: 1;
+        opacity: 0.8;
+    }
+    
+    .percent{font-size:18px;font-weight:600;letter-spacing:0.6px; margin-top: 10px;}
+    
+    /* 2. Intro Styling - Hanya Sapaan dan Tombol */
+    .intro{
+        position:absolute;inset:0;
+        display:flex;align-items:center;justify-content:center;
+        flex-direction:column;gap:18px;padding:28px;text-align:center;
+        z-index:20;opacity:0;transform:translateY(8px);
+        transition:all .6s cubic-bezier(.2,.9,.3,1); 
+        display:none; 
+    }
+    .intro.show{opacity:1;transform:translateY(0); display:flex;}
+    .intro-sub{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.7)}
+    .intro-guest{font-family:'Playfair Display';font-size:34px}
+    .btn-open{margin-top:6px;padding:14px 28px;border-radius:10px;background:#eee;color:var(--accent);font-weight:600;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+    
+    /* 3. Background & Main Content Styling */
+    .bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(6px) brightness(.45) grayscale(.08);transform:scale(1.06); opacity: 0; transition: opacity .8s ease;}
+    .intro.show ~ .bg, .main.show ~ .bg { opacity: 1; }
+    .bg-overlay{position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2));}
+    
+    /* Transisi Scroll Up untuk Main Content */
+    .main{
+        opacity: 0; 
+        transform: translateY(100vh); 
+        transition: all 0.8s cubic-bezier(.2,.9,.3,1);
+        position:relative;
+        z-index:10;
+        display:none;
+    }
+    .main.show{
+        display:block;
+        opacity:1;
+        transform: translateY(0);
+    }
+
+    /* Hero Section (di dalam .main) */
+    .hero{height:58vw;min-height:260px;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:24px;position:relative;overflow:hidden}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.45), rgba(0,0,0,0.02));}
+    .hero-content{position:relative;z-index:2;color:white; text-align: center; width: 100%;}
+    .weinvite{font-size:12px;letter-spacing:2px;opacity:0.95; margin-bottom: 8px;}
+    .names{font-family:'Playfair Display';font-size:28px;letter-spacing:.8px;margin-top:6px}
+    .date-line{font-size:14px;letter-spacing:1.6px;margin-top:8px; font-weight: 600;}
+
+    /* Konten utama lainnya */
+    .body{padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
+    .section{margin-bottom:14px}
+    .title{font-family:'Playfair Display';font-size:16px;color:var(--accent);margin-bottom:6px}
+    .desc{color:var(--muted);font-size:14px;line-height:1.45}
+    .pill{background:rgba(183,110,121,0.08);border:1px solid rgba(183,110,121,0.12);color:var(--accent);padding:8px 12px;border-radius:999px;font-weight:600;font-size:13px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 14px;border-radius:12px;background:var(--accent);color:white;text-decoration:none;font-weight:600;border:none;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(183,110,121,0.12)}
+    .countdown{display:flex;gap:8px}
+    .count{background:rgba(255,255,255,0.02);padding:10px;border-radius:10px;min-width:48px;text-align:center}
+    .count strong{display:block;font-size:16px}
+    .count small{display:block;color:var(--muted);font-size:11px}
+    .footer{padding:16px;text-align:center;font-size:13px;color:var(--muted)}
+    @media(min-width:720px){.hero{height:320px}.names{font-size:36px}}
+  </style>
+</head>
+<body>
+  <div class="viewport">
+    <div class="frame">
+      <div class="bg" id="bg"></div>
+      <div class="bg-overlay"></div>
+
+            <div class="preloader" id="preloader">
+                        <span class="logo-small">
+                💐
+            </span>
+            <div class="preloader-sub">WE INVITE YOU TO CELEBRATE</div>
+            <div class="preloader-names" id="preloaderNames">AFIFA & DANI</div>
+        <div class="percent" id="percentText">0%</div>
+      </div>
+
+            <div class="intro" id="intro">
+        <div class="intro-sub">WE INVITE YOU TO CELEBRATE</div>
+        <div class="intro-guest" id="guestName">Dear Tamu</div>
+        <div style="font-size:13px; color:var(--muted); margin-top: -12px; margin-bottom: 20px;">We apologize if there is any misspelling of name or title</div>
+        <button class="btn-open" id="openBtn">LET'S OPEN</button>
+      </div>
+
+            <div class="main" id="main">
+        <div class="hero" id="heroMain">
+          <div class="hero-content">
+            <div class="weinvite">WE INVITE YOU TO CELEBRATE</div>
+            <div class="names" id="namesMain">AFIFA & DANI</div>
+            <div class="date-line" id="dateLine"></div>           </div>
+        </div>
+
+        <div class="body">
+          <div class="section">
+            <div class="title">Akad & Resepsi</div>
+            <div class="desc">
+              Hari/Tanggal: <strong id="dateText"></strong><br>
+              Waktu: <strong id="timeText"></strong><br>
+              Tempat: <strong id="placeText"></strong>
+            </div>
+          </div>
+
+          <div class="section" style="display:flex;gap:10px;align-items:center">
+            <div class="pill">Doa & Restu</div>
+            <button class="btn" id="btnDirections">Petunjuk Arah</button>
+          </div>
+
+          <div class="section">
+            <div class="title">Hitung Mundur</div>
+            <div class="countdown">
+              <div class="count"><strong id="d">00</strong><small>Hari</small></div>
+              <div class="count"><strong id="h">00</strong><small>Jam</small></div>
+              <div class="count"><strong id="m">00</strong><small>Menit</small></div>
+              <div class="count"><strong id="s">00</strong><small>Detik</small></div>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="title">RSVP</div>
+            <form id="rsvpForm">
+              <input name="name" type="text" placeholder="Nama Anda" required style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);margin-bottom:8px;font-size:14px;background:transparent;color:#fff">
+              <select name="attend" required style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);margin-bottom:8px;font-size:14px;background:transparent;color:#fff">
+                <option value="">Pilih Kehadiran</option>
+                <option value="Hadir">Hadir</option>
+                <option value="Tidak Hadir">Tidak Hadir</option>
+              </select>
+              <div style="display:flex;gap:8px">
+                <button class="btn" type="submit">Kirim</button>
+                <button type="button" id="btnShare" class="btn ghost">Bagikan</button>
+              </div>
+            </form>
+            <div id="rsvpResult" style="display:none;margin-top:10px;padding:10px;background:rgba(255,255,255,0.02);border-radius:10px;color:var(--muted)"></div>
+          </div>
+
+          <div class="footer">Terima kasih atas doa dan kehadiran Anda. — Keluarga</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="musik.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+  const config = {
+    bride: 'Afifa',
+    groom: 'Dani',
+    dateISO: '2026-05-03T03:00:00Z',
+    timeText: '10:00 WIB',
+    placeText: 'Gedung Serba Guna Contoh',
+    heroImage: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=1200&q=60', // Ganti dengan gambar Hero Utama Anda
+    blurImage: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=60' // Ganti dengan gambar Cover/Blur Anda
+  };
+
+  // DOM Elements
+  const bg = document.getElementById('bg');
+  const hero = document.getElementById('heroMain');
+  const intro = document.getElementById('intro');
+  const preloader = document.getElementById('preloader'); 
+  const percentText = document.getElementById('percentText'); 
+  const preloaderNames = document.getElementById('preloaderNames'); 
+  const openBtn = document.getElementById('openBtn');
+  const main = document.getElementById('main');
+  const music = document.getElementById('bgMusic');
+
+  // Set data pengantin ke elemen yang relevan
+  bg.style.backgroundImage = `url('${config.blurImage}')`;
+  hero.style.backgroundImage = `url('${config.heroImage}')`;
+  document.getElementById('namesMain').textContent = `${config.bride} & ${config.groom}`;
+  document.getElementById('dateText').textContent = new Date(config.dateISO).toLocaleDateString('id-ID', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
+  
+  // Format tanggal di Hero: SATURDAY, 28 DECEMBER 2024
+  document.getElementById('dateLine').textContent = new Date(config.dateISO).toLocaleDateString('en-GB', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  }).toUpperCase();
+  
+  document.getElementById('timeText').textContent = config.timeText;
+  document.getElementById('placeText').textContent = config.placeText;
+  preloaderNames.textContent = `${config.bride} & ${config.groom}`;
+
+  // Nama tamu dari URL (?to=Nama)
+  const params = new URLSearchParams(location.search);
+  const guest = params.get('to') || 'Tamu Terhormat';
+  document.getElementById('guestName').textContent = `Dear ${decodeURIComponent(guest)}`;
+
+  // ******************************************************
+  // LOGIKA URUTAN: PRELOADER (1) -> INTRO (2) [Musik ON] -> MAIN (3) [Scroll Up]
+  // ******************************************************
+
+  // Fungsi simulasi Preloader (Urutan 1)
+  function startLoadingSimulation() {
+    let percent = 0;
+    const minWaitTime = 3000; // Minimal 3 detik (3000 ms)
+    const startTime = Date.now();
+    
+    const interval = setInterval(() => {
+      percent += Math.floor(Math.random() * 5) + 1;
+      if (percent > 100) percent = 100;
+
+      percentText.textContent = `${percent}%`;
+
+      if (percent >= 100) {
+        clearInterval(interval);
+        
+        // Tunggu hingga minimal 3 detik terpenuhi sebelum transisi
+        const elapsed = Date.now() - startTime;
+        const remainingTime = Math.max(0, minWaitTime - elapsed);
+
+        setTimeout(async () => {
+          // 1. Transisi Preloader keluar
+          preloader.style.opacity = '0';
+
+            // 2. Coba Putar musik (saat Intro muncul)
+            try { 
+                await music.play(); 
+            } catch (e) {
+                console.warn("Gagal memutar musik otomatis.");
+            }
+            
+          setTimeout(() => {
+            preloader.style.display = 'none';
+            // 3. Tampilkan Intro (Urutan 2)
+            intro.classList.add('show'); 
+          }, 600); 
+        }, remainingTime);
+      }
+    }, 100); 
+  }
+
+  // Mulai Preloader saat skrip dimuat
+  startLoadingSimulation();
+
+  // Tombol "Let's Open" (Mengatur transisi dari 2 ke 3: Scroll Up)
+  openBtn.addEventListener('click', () => {
+    intro.style.opacity = '0'; // Sembunyikan Intro dengan fade
+
+    // Coba putar musik lagi jika gagal di Intro (interaksi user)
+    music.play().catch(e => console.log("Musik sudah berputar atau gagal diputar."));
+
+    // Tampilkan Main Content (Urutan 3) dengan efek scroll
+    setTimeout(() => {
+        intro.style.display = 'none'; // Sembunyikan intro sepenuhnya
+        main.style.display = 'block'; 
+        // Menunggu sebentar agar transisi transform (scroll) terlihat jelas
+        setTimeout(() => main.classList.add('show'), 50); 
+    }, 400); 
+  });
+
+  // Countdown Functionality (tidak ada perubahan)
+  function startCountdown(iso) {
+    const target = new Date(iso).getTime();
+    const d = document.getElementById('d'),
+          h = document.getElementById('h'),
+          m = document.getElementById('m'),
+          s = document.getElementById('s');
+
+    function tick() {
+      const now = Date.now();
+      let diff = Math.max(0, target - now);
+      const days = Math.floor(diff / 86400000);
+      diff -= days * 86400000;
+      const hours = Math.floor(diff / 3600000);
+      diff -= hours * 3600000;
+      const mins = Math.floor(diff / 60000);
+      diff -= mins * 60000;
+      const secs = Math.floor(diff / 1000);
+      d.textContent = String(days).padStart(2, '0');
+      h.textContent = String(hours).padStart(2, '0');
+      m.textContent = String(mins).padStart(2, '0');
+      s.textContent = String(secs).padStart(2, '0');
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  startCountdown(config.dateISO);
+</script>
+
+</body>
+</html>

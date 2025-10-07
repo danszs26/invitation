@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We Invite You to Celebrate | Afifa & Dani</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="loading-screen" class="screen">
+        <div class="content-loading">
+            <p>WE INVITE YOU TO CELEBRATE</p>
+            <h2>Afifa & Dani</h2>
+            <div id="progress-bar">0%</div>
+        </div>
+    </div>
+
+    <div id="cover-page" class="screen hidden">
+        <div class="video-background">
+            <video autoplay muted loop id="bg-video-cover"> 
+                <source src="your-background-video.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="overlay-content">
+            <p class="small-text">WE INVITE YOU TO CELEBRATE</p>
+            <h1>Afifa & Dani</h1>
+            <p class="date">Sunday, SENSOR 2026</p>
+            <div id="greeting-box" class="hidden">
+                <p class="dear-text">Dear</p>
+                <h2 id="guest-name">Tamu Undangan</h2>
+                <p class="apology">We apologize if there is any misspelling of name or title</p>
+            </div>
+            <button id="open-button" class="btn">LET'S OPEN</button>
+            <p class="scroll-down-hint hidden">&#x2193;</p>
+        </div>
+    </div>
+
+    <div id="main-content" class="hidden"> 
+        
+        <div id="background-container" class="video-background">
+            <video muted loop class="bg-video-main active" id="bg-video-1"> 
+                <source src="your-background-video.mp4" type="video/mp4">
+            </video>
+            <video muted loop class="bg-video-main" id="bg-video-2">
+                <source src="your-background-video-3.mp4" type="video/mp4">
+            </video>
+            <video muted loop class="bg-video-main" id="bg-video-3">
+                <source src="your-background-video-3.mp4" type="video/mp4">
+            </video>
+            <video muted loop class="bg-video-main" id="bg-video-4">
+                <source src="your-background-video.mp4" type="video/mp4">
+            </video>
+            <video muted loop class="bg-video-main" id="bg-video-5">
+                <source src="your-background-video.mp4" type="video/mp4">
+            </video>
+        </div>
+        
+        <div id="section-container"> 
+
+            <section class="info-section full-page left-align-text" data-video-id="bg-video-1">
+                <div class="overlay-content">
+                    <h2 class="section-title">Ar-Rum : 21</h2>
+                    <p class="section-text-body">"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir"</p>
+                </div>
+            </section>
+
+            <section class="info-section full-page center-align-text" data-video-id="bg-video-2">
+                <div class="overlay-content">
+                    <h2 class="section-title">MINGGU,<br>03 MEI <br>2026</h2>
+                    <br><br>
+                    <h2 class="section-title">AKAD & RESEPSI <br>8.00 - 12.00 <br>TACIRO GRAND BALLROOM</h2>
+                    <p class="section-text-body">Jl. Bambang Utoyo No.118A, 5 Ilir, Kec. Ilir Tim. II, Kota Palembang, Sumatera Selatan 30111</p>
+                </div>
+            </section>
+            
+            <section class="info-section full-page countdown-section center-align-text" data-video-id="bg-video-3"> 
+                <div class="overlay-content">
+                    <img src="your-couple-image.jpeg" alt="Afifa & Dani" class="couple-image">
+                    
+                    <h2 class="section-title-countdown">ALMOST TIME FOR OUR CELEBRATION</h2>
+                    
+                    <div id="countdown-timer">
+                        <div class="countdown-item">
+                            <span id="days">00</span><p>Hari</p>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="hours">00</span><p>Jam</p>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="minutes">00</span><p>Menit</p>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="seconds">00</span><p>Detik</p>
+                        </div>
+                    </div>
+                    
+                    <a href="https://calendar.app.google/6rdq8WdHMhEjUrZs6" target="_blank" class="btn save-date-btn">
+                        SAVE THE DATE →
+                    </a>
+                </div>
+            </section>
+            
+            <section class="info-section full-page center-align-text" data-video-id="bg-video-4">
+                <div class="overlay-content">
+                    <h2 class="section-title">Wedding Gift</h2>
+                    <p class="section-text-body">For those of you who want to give a token of love to bride and groom, you can use the account number below:</p>
+                    <br>
+                    <p>BCA</p>
+                    <p>12584464</p>
+                    <p>Muh. Dani Hidayatullah</p>
+                    <br>
+                    <p>BNI</p>
+                    <p>215154887</p>
+                    <p>Royhana Afifa</p>
+                </div>
+            </section>
+            
+            <section class="info-section full-page center-align-text" data-video-id="bg-video-5">
+                <div class="overlay-content">
+                    <h2 class="section-title" style="margin-bottom: 30px;">Kindly Confirm Your Presence and Share your Blessings</h2>
+                    <p class="small-text">We kindly request your response to confirm your attendance at our upcomming event. Alongside your RSPV, please take a moment to extend your warm regards and best wishes</p>
+                    
+                    <form id="guest-form" class="wish-form">
+                        
+                        <input type="text" id="wish-name" placeholder="NAMA" required>
+
+                        <select id="wish-attendance" required>
+                            <option value="" disabled selected>KONFIRMASI KEHADIRAN</option>
+                            <option value="Hadir">Saya Akan Hadir</option>
+                            <option value="Tidak Hadir">Mohon Maaf, Tidak Bisa Hadir</option>
+                        </select>
+
+                        <select id="wish-guests" required>
+                            <option value="" disabled selected>JUMLAH TAMU</option>
+                            <option value="1">1 Orang</option>
+                            <option value="2">2 Orang</option>
+                            <option value="3">3 Orang</option>
+                            <option value="4">4 Orang</option>
+                        </select>
+
+                        <textarea id="wish-message" placeholder="TULISKAN UCAPAN" rows="4" required></textarea>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn submit-wish-btn">SUBMIT</button>
+                            <button type="button" id="show-wishes-btn" class="btn show-wishes-btn-form">SHOW WISHES</button>
+                        </div>
+                    </form>
+                    
+                    <div class="closing-message" style="margin-top: 50px;">
+                        <p>Hormat kami yang berbahagia,</p>
+                        <p class="names">Afifa & Dani</p>
+                    </div>
+                </div>
+            </section>
+
+        </div> </div> <div id="wishes-popup" class="hidden-popup">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <h3 class="popup-title">WISHES</h3>
+            <div id="wishes-list" class="wishes-list">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <audio id="background-music" loop>
+        <source src="musik.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+</body>
+</html>

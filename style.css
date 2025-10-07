@@ -1,0 +1,389 @@
+/* Import Fonts */
+/* font-family: 'Playfair Display', serif; (Untuk Judul) */
+/* font-family: 'Montserrat', sans-serif; (Untuk Teks Kecil) */
+
+:root {
+    --primary-color: #ffffff; /* Putih */
+    --secondary-color: #111111; /* Hitam/Abu Tua */
+    --accent-color: #c9b47e; /* Emas (Opsional) */
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* Mencegah scroll di level browser */
+    scroll-behavior: smooth; /* Opsional, tapi bisa membantu transisi */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+    /* overflow: hidden; Mencegah scroll browser normal (PENTING untuk carousel) */
+}
+
+/* Style untuk Loading Screen dan Cover Page (Fixed) */
+.screen {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    transition: opacity 1s ease-in-out;
+    z-index: 50; 
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- Video Background (Cover) --- */
+#bg-video-cover {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    filter: blur(2px) brightness(0.7);
+}
+
+/* --- Main Content (CAROUSEL MODE) --- */
+#main-content {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 10;
+    /* overflow: hidden;  */
+}
+
+/* Background Video Container di Main Content */
+#background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Style untuk semua video background di main content */
+.bg-video-main {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    filter: blur(2px) brightness(0.7);
+    opacity: 0; 
+    transition: opacity 1s ease-in-out; 
+}
+
+.bg-video-main.active {
+    opacity: 1; 
+}
+
+/* Section Container yang digeser */
+#section-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 500vh; /* 4 sections * 100vh */
+    transition: transform 1s ease-in-out; /* Transisi saat berganti halaman */
+    z-index: 5; 
+}
+
+/* Setiap Section adalah satu halaman penuh */
+.info-section.full-page {
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 0;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+
+/* Konten di dalam setiap section */
+.overlay-content {
+    position: relative;
+    z-index: 5;
+    padding: 20px;
+    max-width: 800px; 
+    margin: 0 auto; 
+    width: 100%;
+    box-sizing: border-box;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%; 
+}
+
+/* --- Style Alignment Khusus Section --- */
+
+/* Section Ar-Rum (Rata Kiri) */
+.left-align-text .overlay-content {
+    align-items: flex-start; 
+    text-align: left;
+    padding: 40px;
+}
+.left-align-text .section-text-body {
+    text-align: justify;
+}
+/* Section Jadwal, Countdown, Gift (Terpusat) */
+.center-align-text .overlay-content {
+    align-items: center; 
+    text-align: center;
+    padding: 40px;
+}
+
+/* --- TOMBOL (KOREKSI STYLE) --- */
+
+.btn {
+    /* Reset background dan border ke minimal */
+    padding: 10px 50px;
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    font-size: 1em;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background 0.3s;
+    border-radius: 20px;
+    text-decoration: none; /* Penting untuk tag <a> */
+    display: inline-block; /* Agar padding dan margin bekerja */
+}
+
+.save-date-btn {
+    border: 1px solid var(--primary-color);
+    padding: 10px 50px;
+    border-radius: 50px; /* Lebih melingkar */
+}
+
+.btn:hover {
+    background-color: rgba(255, 255, 255, 0.041);
+}
+
+/* --- Style Countdown Element --- */
+.couple-image {
+    width: 150px; 
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px; 
+    margin-bottom: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.section-title-countdown {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2em;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+#countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 15px; 
+    margin-bottom: 50px;
+    width: 100%;
+    max-width: 400px; 
+}
+
+.countdown-item span {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5em; 
+}
+
+/* --- Section Teks & Penutup --- */
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.closing-message {
+    padding-top: 50px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: 40px; /* Tambahkan jarak dari konten Gift */
+}
+
+.closing-message .names {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5em;
+}
+
+/* --- Style Form Ucapan (Section 5) --- */
+.wish-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px; 
+    margin: 20px auto;
+}
+
+.wish-form input[type="text"],
+.wish-form textarea,
+.wish-form select {
+    /* Style input minimalis (garis bawah) */
+    padding: 10px 10px;
+    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.5); 
+    background-color: transparent; 
+    color: var(--primary-color);
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none; 
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.wish-form select {
+    appearance: none; /* Hapus panah default di beberapa browser */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23ffffff'%3e%3cpath d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd' fill-rule='evenodd'%3e%3c/path%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+    padding-right: 20px; /* Jarak untuk panah kustom */
+}
+
+.wish-form select option {
+    background: var(--secondary-color); 
+    color: var(--primary-color);
+}
+
+.wish-form input::placeholder, .wish-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.226);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.submit-wish-btn, .show-wishes-btn-form {
+    width: 50%; /* Bagi lebar tombol 50% */
+    padding: 12px 10px;
+    font-size: 0.9em;
+    border-radius: 0; /* Kotak tegas */
+}
+
+/* --- Style POPUP Ucapan --- */
+#wishes-popup {
+    position: fixed;
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: rgba(211, 211, 208, 0.774); 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s;
+}
+
+.hidden-popup {
+    /* Perbaikan KRITIS: display: none untuk memastikan pop-up tidak mencegat klik saat tersembunyi */
+    display: none !important; 
+    opacity: 0;
+}
+
+#wishes-popup:not(.hidden-popup) {
+    display: flex; /* Aktifkan flex saat pop-up muncul */
+    opacity: 1;
+}
+
+.popup-content {
+    background-color: var(--popup-bg); 
+    color: var(--popup-text);
+    margin: 10% auto;
+    padding: 25px 30px;
+    width: 90%; 
+    max-width: 500px;
+    border-radius: 0; 
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 50px rgba(14, 13, 13, 0.658);
+}
+
+.close-btn {
+    color: var(--popup-text);
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    color: #000;
+}
+
+.popup-title {
+    font-family: 'Playfair Display', serif;
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    border-bottom: 2px solid var(--popup-text); 
+    padding-bottom: 5px;
+    color: #423c3cb4;
+}
+
+.wishes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #000000;
+}
+
+.wish-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 15px;
+}
+
+.wish-item strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 5px;
+    color: #272727cc;
+}
+
+.wish-item p {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+}
+
+.wish-item .attendance {
+    font-size: 0.8em;
+    color: #888;
+    margin-top: 5px;
+}
