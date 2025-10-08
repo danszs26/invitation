@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
                 coverPage.classList.remove('hidden');
+                
+                // PERBAIKAN IOS KRITIS: Paksa play video cover setelah loading selesai
+                if(bgVideoCover) {
+                    bgVideoCover.play().catch(e => console.log("Cover video play failed:", e.name));
+                }
 
                 setTimeout(() => {
                     greetingBox.classList.remove('hidden');
@@ -80,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if(countdownEl.minutes) countdownEl.minutes.textContent = formatTime(m);
             if(countdownEl.seconds) countdownEl.seconds.textContent = formatTime(s);
         } else {
-            // Cek apakah countdownInterval ada sebelum mencoba membersihkannya
             if (typeof countdownInterval !== 'undefined') {
                 clearInterval(countdownInterval);
             }
@@ -94,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     
-    // --- 4. FUNGSI CAROUSEL (TELAH DIPERBAIKI UNTUK MENGHINDARI ABORTERROR) ---
+    // --- 4. FUNGSI CAROUSEL (Stabilisasi video) ---
 
     function switchBackground(pageIndex) {
         if (sections.length === 0) return;
@@ -104,19 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
         bgVideosMain.forEach(video => {
             
             if (video.id === targetVideoId) {
-                // 1. Tampilkan video target
                 video.classList.add('active');
                 video.currentTime = 0; 
-                // 2. Coba putar video. catch() untuk menangani error jika gagal play (misal: browser blocking)
                 video.play().catch(e => {
                     console.error("Gagal memutar video target:", e.name);
                 }); 
             } else {
-                // 3. Sembunyikan dan jeda video lain
                 video.classList.remove('active');
-                
-                // KRITIS: HANYA panggil pause() jika video sedang berjalan (video.paused === false).
-                // Ini mencegah AbortError yang terjadi karena pause() menginterupsi play()
                 if (video.paused === false) { 
                      video.pause();
                 }
@@ -141,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleWheel(event) {
-        // Abaikan scroll jika masih di cover page atau sedang transisi
         if (mainContent.classList.contains('hidden') || isTransitioning) {
             event.preventDefault(); 
             return;
@@ -149,9 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const delta = event.deltaY || event.detail || event.wheelDelta;
         
-        if (delta > 0) { // Scroll Down
+        if (delta > 0) { 
             goToPage(currentPage + 1);
-        } else if (delta < 0) { // Scroll Up
+        } else if (delta < 0) { 
             goToPage(currentPage - 1);
         }
         
@@ -173,9 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (Math.abs(delta) < minSwipeDistance) return;
 
-        if (delta > 0) { // Swipe Up
+        if (delta > 0) { 
             goToPage(currentPage + 1);
-        } else { // Swipe Down
+        } else { 
             goToPage(currentPage - 1);
         }
     });
@@ -185,14 +182,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 5. Logika Form Ucapan & Pop-up ---
     
-    // Menggunakan localStorage agar data ucapan tetap ada meskipun browser ditutup
     let wishesData = JSON.parse(localStorage.getItem('wishes')) || [];
     
     function saveWishes() {
         localStorage.setItem('wishes', JSON.stringify(wishesData));
     }
     
-    // Submit Form
+    // Submit Form (Logika ini tetap sama)
     if (guestForm) {
         guestForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -202,7 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const attendance = document.getElementById('wish-attendance').value;
             const guests = document.getElementById('wish-guests').value; 
             
-            // Validasi: pastikan semua select sudah dipilih (walaupun sudah ada 'required')
             if (!name || !message || !attendance || !guests) {
                  alert("Mohon lengkapi semua isian formulir (Nama, Kehadiran, Jumlah Tamu, dan Ucapan).");
                  return;
@@ -222,13 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Terima kasih! Konfirmasi kehadiran (${attendance}) untuk ${guests} orang dan ucapan Anda sudah terkirim.`);
             guestForm.reset(); 
             
-            // Set ulang select ke default setelah reset form
             document.getElementById('wish-attendance').value = "";
             document.getElementById('wish-guests').value = "";
         });
     }
 
-    // Tampilkan Ucapan
     function renderWishes() {
         if (!wishesList) return;
         wishesList.innerHTML = ''; 
@@ -238,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // Render ucapan terbaru di atas (reverse slice agar tidak merusak data asli)
         wishesData.slice().reverse().forEach(wish => {
             const item = document.createElement('div');
             item.className = 'wish-item';
@@ -251,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event listener untuk tombol 'SHOW WISHES'
     if (showWishesBtn) {
         showWishesBtn.addEventListener('click', () => {
             renderWishes();
@@ -259,14 +250,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Event listener untuk tombol tutup pop-up
     if (closePopupBtn) {
         closePopupBtn.addEventListener('click', () => {
             wishesPopup.classList.add('hidden-popup');
         });
     }
 
-    // Tutup pop-up jika mengklik di luar area pop-up
     window.addEventListener('click', (event) => {
         if (event.target === wishesPopup) {
             wishesPopup.classList.add('hidden-popup');
@@ -274,11 +263,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // --- 6. Fungsi Tombol "LET'S OPEN" ---
+    // --- 6. Fungsi Tombol "LET'S OPEN" (PERBAIKAN IOS: Audio & Video) ---
     openButton.addEventListener('click', () => {
         
-        backgroundMusic.play().catch(error => {});
+        // 1. Coba putar musik. Ini harus dipanggil saat interaksi user (klik)
+        backgroundMusic.play().catch(error => {
+            console.error("Gagal memutar musik:", error.name);
+        });
         
+        // 2. Jeda video cover yang sudah kita coba putar di step 2
         if(bgVideoCover) bgVideoCover.pause(); 
 
         coverPage.classList.add('hidden');
@@ -288,8 +281,15 @@ document.addEventListener('DOMContentLoaded', () => {
             mainContent.classList.remove('hidden');
             mainContent.style.opacity = 1; 
 
-            // Inisialisasi carousel (panggil goToPage(1) setelah main content muncul)
+            // 3. Inisialisasi carousel ke halaman 1 (ini memanggil switchBackground)
             goToPage(1); 
+            
+            // 4. KRITIS IOS: Coba putar kembali video yang baru di-load di halaman 1.
+            // Langkah ini seringkali diperlukan iOS untuk memutar media setelah transisi DOM.
+            const activeVideo = document.querySelector('.bg-video-main.active');
+            if (activeVideo) {
+                 activeVideo.play().catch(e => console.log("Final background video play failed:", e.name));
+            }
             
         }, 1000); 
     });
